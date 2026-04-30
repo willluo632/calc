@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AP Calculus Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@400;500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0e0e11;
+    --bg2: #16161c;
+    --bg3: #1e1e28;
+    --card: #1a1a24;
+    --border: rgba(255,255,255,0.08);
+    --accent: #7c6dfa;
+    --accent2: #fa6d6d;
+    --accent3: #6dfab5;
+    --gold: #f0c060;
+    --text: #e8e8f0;
+    --muted: #8888aa;
+    --mono: 'DM Mono', monospace;
+    --serif: 'Playfair Display', serif;
+    --sans: 'Lato', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(14,14,17,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 0; height: 60px;
+  }
+  .nav-logo {
+    font-family: var(--serif); font-size: 1.2rem; font-weight: 700;
+    color: var(--gold); margin-right: auto; letter-spacing: -0.02em;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 0; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 0.82rem;
+    letter-spacing: 0.08em; text-transform: uppercase; padding: 0 1rem;
+    height: 60px; display: flex; align-items: center;
+    border-bottom: 2px solid transparent; transition: all 0.2s;
+    font-weight: 400;
+  }
+  .nav-links a:hover { color: var(--text); border-bottom-color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    padding: 6rem 2rem 4rem;
+    text-align: center;
+    background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124,109,250,0.18) 0%, transparent 70%);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-badge {
+    display: inline-block; background: rgba(124,109,250,0.12);
+    border: 1px solid rgba(124,109,250,0.3); color: var(--accent);
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 0.3rem 1rem; border-radius: 100px; margin-bottom: 1.5rem;
+    font-family: var(--mono); font-weight: 500;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900; line-height: 1.08; letter-spacing: -0.03em;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 em { font-style: normal; color: var(--gold); }
+  .hero p { color: var(--muted); font-size: 1.1rem; max-width: 520px; margin: 0 auto 2rem; font-weight: 300; }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 3rem; margin-top: 3rem;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-family: var(--serif); font-size: 2rem; font-weight: 700; color: var(--gold); }
+  .stat-lbl { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* SECTIONS */
+  section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem;
+  }
+  h2 {
+    font-family: var(--serif); font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700; letter-spacing: -0.02em; margin-bottom: 2rem;
+  }
+
+  /* TOPIC GRID */
+  .topic-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1px;
+    background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+  }
+  .topic-card {
+    background: var(--card); padding: 1.5rem;
+    cursor: pointer; transition: background 0.2s;
+    border: none; text-align: left; color: var(--text);
+  }
+  .topic-card:hover { background: var(--bg3); }
+  .topic-card.active { background: rgba(124,109,250,0.1); border-left: 3px solid var(--accent); }
+  .topic-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
+  .topic-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem; }
+  .topic-sub { font-size: 0.78rem; color: var(--muted); font-weight: 300; }
+  .topic-tag {
+    display: inline-block; margin-top: 0.6rem;
+    font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.2rem 0.6rem; border-radius: 100px; font-family: var(--mono);
+  }
+  .tag-ab { background: rgba(109,250,181,0.12); color: var(--accent3); border: 1px solid rgba(109,250,181,0.25); }
+  .tag-bc { background: rgba(250,109,109,0.12); color: var(--accent2); border: 1px solid rgba(250,109,109,0.25); }
+
+  /* CONCEPT VIEWER */
+  .concept-panel {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; min-height: 400px;
+  }
+  .concept-header {
+    background: var(--bg3); padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .concept-title { font-family: var(--serif); font-size: 1.3rem; font-weight: 700; }
+  .concept-body { padding: 2rem; }
+  .formula-box {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1.2rem 1.5rem; margin: 1.2rem 0;
+    font-family: var(--mono); font-size: 1rem; color: var(--gold);
+    text-align: center; letter-spacing: 0.02em;
+  }
+  .concept-body p { color: var(--muted); font-size: 0.92rem; margin-bottom: 0.8rem; }
+  .concept-body strong { color: var(--text); font-weight: 700; }
+  .steps { list-style: none; counter-reset: steps; }
+  .steps li {
+    counter-increment: steps; padding: 0.6rem 0 0.6rem 2.5rem; position: relative;
+    color: var(--muted); font-size: 0.9rem; border-bottom: 1px solid var(--border);
+  }
+  .steps li::before {
+    content: counter(steps);
+    position: absolute; left: 0; top: 0.6rem;
+    width: 1.5rem; height: 1.5rem; background: var(--accent);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 700; color: white;
+    line-height: 1.5rem; text-align: center;
+  }
+  .steps li strong { color: var(--text); }
+
+  /* INTERACTIVE GRAPH */
+  .graph-section {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden;
+  }
+  .graph-header {
+    padding: 1.2rem 1.5rem; background: var(--bg3); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: gap;
+  }
+  .graph-header h3 { font-family: var(--serif); font-weight: 700; }
+  .graph-controls {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .fn-btn {
+    background: var(--bg2); border: 1px solid var(--border); color: var(--muted);
+    padding: 0.35rem 0.9rem; border-radius: 6px; cursor: pointer;
+    font-family: var(--mono); font-size: 0.8rem; transition: all 0.2s;
+  }
+  .fn-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .fn-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+  .graph-canvas-wrap { padding: 1rem 1.5rem; height: 280px; position: relative; }
+  .graph-info { padding: 0 1.5rem 1.2rem; font-size: 0.82rem; color: var(--muted); font-family: var(--mono); }
+
+  /* SLIDER */
+  .slider-wrap { padding: 0.8rem 1.5rem; border-top: 1px solid var(--border); }
+  .slider-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem; display: flex; justify-content: space-between; }
+  .slider-label span { font-family: var(--mono); color: var(--gold); }
+  input[type=range] {
+    width: 100%; accent-color: var(--accent);
+    -webkit-appearance: none; height: 4px; border-radius: 2px;
+    background: var(--bg3); outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px;
+    background: var(--accent); border-radius: 50%; cursor: pointer;
+  }
+
+  /* PRACTICE */
+  .quiz-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 2rem; margin-bottom: 1rem;
+  }
+  .quiz-q { font-family: var(--serif); font-size: 1.1rem; font-weight: 700; margin-bottom: 1.2rem; }
+  .quiz-choices { display: flex; flex-direction: column; gap: 0.5rem; }
+  .choice-btn {
+    background: var(--bg2); border: 1px solid var(--border); color: var(--text);
+    padding: 0.7rem 1.2rem; border-radius: 8px; cursor: pointer;
+    text-align: left; font-family: var(--sans); font-size: 0.9rem;
+    transition: all 0.2s; font-weight: 300;
+  }
+  .choice-btn:hover { border-color: var(--accent); background: rgba(124,109,250,0.06); }
+  .choice-btn.correct { background: rgba(109,250,181,0.1); border-color: var(--accent3); color: var(--accent3); }
+  .choice-btn.wrong { background: rgba(250,109,109,0.1); border-color: var(--accent2); color: var(--accent2); }
+  .quiz-result {
+    margin-top: 1rem; padding: 0.8rem 1.2rem; border-radius: 8px;
+    font-size: 0.9rem; display: none;
+  }
+  .quiz-result.show { display: block; }
+  .quiz-result.correct-res { background: rgba(109,250,181,0.08); color: var(--accent3); border: 1px solid rgba(109,250,181,0.2); }
+  .quiz-result.wrong-res { background: rgba(250,109,109,0.08); color: var(--accent2); border: 1px solid rgba(250,109,109,0.2); }
+  .next-btn {
+    background: var(--accent); border: none; color: white; padding: 0.6rem 1.4rem;
+    border-radius: 8px; cursor: pointer; font-family: var(--sans); font-weight: 700;
+    font-size: 0.85rem; margin-top: 1rem; display: none; transition: opacity 0.2s;
+  }
+  .next-btn:hover { opacity: 0.85; }
+  .next-btn.show { display: inline-block; }
+  .progress-bar-wrap { background: var(--bg3); height: 4px; border-radius: 2px; margin-bottom: 2rem; }
+  .progress-bar { height: 4px; border-radius: 2px; background: var(--accent); transition: width 0.5s; }
+  .quiz-counter { font-size: 0.78rem; color: var(--muted); font-family: var(--mono); margin-bottom: 0.5rem; }
+  .score-badge {
+    text-align: center; padding: 3rem;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  }
+  .score-num { font-family: var(--serif); font-size: 4rem; font-weight: 900; color: var(--gold); }
+  .score-label { color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+  .retry-btn {
+    margin-top: 1.5rem; background: transparent; border: 1px solid var(--border);
+    color: var(--text); padding: 0.7rem 1.8rem; border-radius: 8px; cursor: pointer;
+    font-family: var(--sans); font-weight: 700; font-size: 0.9rem; transition: all 0.2s;
+  }
+  .retry-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* FORMULA SHEET */
+  .formula-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+  .formula-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem;
+  }
+  .formula-cat {
+    font-size: 0.68rem; font-family: var(--mono); letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem;
+  }
+  .formula-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.4rem; }
+  .formula-expr {
+    font-family: var(--mono); font-size: 0.88rem; color: var(--gold);
+    background: var(--bg2); padding: 0.5rem 0.8rem; border-radius: 6px; margin-top: 0.4rem;
+  }
+  .formula-note { font-size: 0.78rem; color: var(--muted); margin-top: 0.4rem; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 2rem; border-top: 1px solid var(--border);
+    font-size: 0.78rem; color: var(--muted); font-family: var(--mono);
+  }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .hero { padding: 3rem 1.2rem 2rem; }
+    section { padding: 2.5rem 1.2rem; }
+    .hero-stats { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">∫<span>calc</span> study</div>
+  <div class="nav-links">
+    <a href="#topics">Topics</a>
+    <a href="#visualizer">Visualizer</a>
+    <a href="#practice">Practice</a>
+    <a href="#formulas">Formulas</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">AP Calculus AB · BC · Study Hub</div>
+  <h1>Master <em>Calculus</em><br>before exam day.</h1>
+  <p>Interactive lessons, formula sheets, and adaptive practice questions for AP Calculus AB and BC.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">8</div><div class="stat-lbl">Core Topics</div></div>
+    <div class="stat"><div class="stat-num">30+</div><div class="stat-lbl">Practice Questions</div></div>
+    <div class="stat"><div class="stat-num">50+</div><div class="stat-lbl">Key Formulas</div></div>
+  </div>
+</div>
+
+<!-- TOPICS -->
+<section id="topics">
+  <div class="section-label">01 — Topics</div>
+  <h2>Choose a Concept</h2>
+  <div class="topic-grid" id="topicGrid"></div>
+  <div style="margin-top:1.5rem">
+    <div class="concept-panel" id="conceptPanel">
+      <div class="concept-header">
+        <div class="concept-title" id="conceptTitle">Select a topic above</div>
+      </div>
+      <div class="concept-body" id="conceptBody">
+        <p>Click any topic card to explore the concept, see the key formulas, and understand the method.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VISUALIZER -->
+<section id="visualizer">
+  <div class="section-label">02 — Visualizer</div>
+  <h2>Graph Explorer</h2>
+  <div class="graph-section">
+    <div class="graph-header">
+      <h3>Function &amp; Derivative Plotter</h3>
+      <span style="font-size:0.78rem;color:var(--muted);font-family:var(--mono)">f(x) shown in purple · f′(x) in gold</span>
+    </div>
+    <div class="graph-controls" id="graphControls"></div>
+    <div class="graph-canvas-wrap">
+      <canvas id="fnChart"></canvas>
+    </div>
+    <div class="slider-wrap">
+      <div class="slider-label">Zoom / x-range <span id="rangeVal">±6</span></div>
+      <input type="range" id="rangeSlider" min="2" max="12" value="6" step="0.5">
+    </div>
+    <div class="graph-info" id="graphInfo">Select a function above to visualize it and its derivative.</div>
+  </div>
+</section>
+
+<!-- PRACTICE -->
+<section id="practice">
+  <div class="section-label">03 — Practice</div>
+  <h2>Quiz Yourself</h2>
+  <div id="quizArea"></div>
+</section>
+
+<!-- FORMULA SHEET -->
+<section id="formulas">
+  <div class="section-label">04 — Reference</div>
+  <h2>Formula Sheet</h2>
+  <div class="formula-grid" id="formulaGrid"></div>
+</section>
+
+<footer>built for ap calculus students · use alongside official collegeboard resources</footer>
+
+<script>
+// ─── TOPIC DATA ────────────────────────────────────────────────────────────
+const topics = [
+  {
+    icon: "📐", name: "Limits", sub: "Foundation of calculus", tag: "ab",
+    content: {
+      intro: "A <strong>limit</strong> describes the value a function approaches as the input approaches some value. Limits are the bedrock of all of calculus.",
+      formula: "lim(x→c) f(x) = L",
+      points: [
+        "<strong>Left-hand limit:</strong> approach c from the left (x → c⁻)",
+        "<strong>Right-hand limit:</strong> approach c from the right (x → c⁺)",
+        "<strong>Limit exists</strong> only when both one-sided limits are equal",
+        "<strong>L'Hôpital's Rule:</strong> if 0/0 or ∞/∞, take derivatives of top and bottom",
+        "<strong>Squeeze Theorem:</strong> if g(x) ≤ f(x) ≤ h(x) and g→L and h→L, then f→L"
+      ]
+    }
+  },
+  {
+    icon: "📈", name: "Continuity", sub: "When limits meet function values", tag: "ab",
+    content: {
+      intro: "A function is <strong>continuous at c</strong> when three conditions hold: f(c) is defined, the limit exists, and they're equal.",
+      formula: "f continuous at c ⟺ lim(x→c) f(x) = f(c)",
+      points: [
+        "<strong>Removable discontinuity:</strong> hole in graph — limit exists but ≠ f(c)",
+        "<strong>Jump discontinuity:</strong> left and right limits exist but are unequal",
+        "<strong>Infinite discontinuity:</strong> vertical asymptote at c",
+        "<strong>IVT:</strong> if f is continuous on [a,b], it takes every value between f(a) and f(b)"
+      ]
+    }
+  },
+  {
+    icon: "∂", name: "Derivatives", sub: "Instantaneous rate of change", tag: "ab",
+    content: {
+      intro: "The <strong>derivative</strong> f′(x) gives the instantaneous rate of change — the slope of the tangent line at any point.",
+      formula: "f′(x) = lim(h→0) [f(x+h) − f(x)] / h",
+      points: [
+        "<strong>Power Rule:</strong> d/dx[xⁿ] = nxⁿ⁻¹",
+        "<strong>Product Rule:</strong> d/dx[uv] = u′v + uv′",
+        "<strong>Quotient Rule:</strong> d/dx[u/v] = (u′v − uv′) / v²",
+        "<strong>Chain Rule:</strong> d/dx[f(g(x))] = f′(g(x))·g′(x)",
+        "<strong>Implicit diff:</strong> differentiate both sides, solve for dy/dx"
+      ]
+    }
+  },
+  {
+    icon: "⛰", name: "Applications of Derivatives", sub: "Optimization & curve sketching", tag: "ab",
+    content: {
+      intro: "Derivatives tell us about <strong>increasing/decreasing behavior</strong>, concavity, local extrema, and optimization.",
+      formula: "At critical points: f′(c) = 0 or f′(c) undefined",
+      points: [
+        "<strong>1st Derivative Test:</strong> f′ changes + to − → local max; − to + → local min",
+        "<strong>2nd Derivative Test:</strong> f′(c)=0 and f″(c)<0 → max; f″(c)>0 → min",
+        "<strong>Concave up:</strong> f″ > 0; concave down: f″ < 0",
+        "<strong>Inflection point:</strong> f″ changes sign",
+        "<strong>Related rates:</strong> differentiate an equation with respect to time"
+      ]
+    }
+  },
+  {
+    icon: "∫", name: "Integrals", sub: "Area under a curve", tag: "ab",
+    content: {
+      intro: "The <strong>definite integral</strong> gives the net area between a curve and the x-axis. The indefinite integral is the antiderivative.",
+      formula: "∫ f(x) dx = F(x) + C  where  F′(x) = f(x)",
+      points: [
+        "<strong>Power Rule:</strong> ∫xⁿ dx = xⁿ⁺¹/(n+1) + C  (n ≠ −1)",
+        "<strong>∫eˣ dx</strong> = eˣ + C",
+        "<strong>∫(1/x) dx</strong> = ln|x| + C",
+        "<strong>U-substitution:</strong> let u = g(x), replace dx with du/g′(x)",
+        "<strong>Definite integral:</strong> ∫[a,b] f(x) dx = F(b) − F(a)"
+      ]
+    }
+  },
+  {
+    icon: "🔗", name: "FTC", sub: "Fundamental Theorem of Calculus", tag: "ab",
+    content: {
+      intro: "The <strong>FTC</strong> unifies differentiation and integration — two apparently opposite processes.",
+      formula: "d/dx ∫[a,x] f(t) dt = f(x)",
+      points: [
+        "<strong>FTC Part 1:</strong> d/dx ∫[a,x] f(t) dt = f(x)",
+        "<strong>FTC Part 2:</strong> ∫[a,b] f(x) dx = F(b) − F(a)",
+        "<strong>Chain rule version:</strong> d/dx ∫[a,g(x)] f(t) dt = f(g(x))·g′(x)",
+        "<strong>Net change:</strong> ∫[a,b] f′(x) dx = f(b) − f(a)"
+      ]
+    }
+  },
+  {
+    icon: "🌀", name: "Series & Sequences", sub: "Convergence and Taylor/Maclaurin", tag: "bc",
+    content: {
+      intro: "BC Calculus extends integration to <strong>infinite series</strong>, including power series and polynomial approximations.",
+      formula: "Σ aₙ converges if |r| < 1 (geometric)  or  by integral/comparison/ratio test",
+      points: [
+        "<strong>Geometric series:</strong> Σ arⁿ = a/(1−r) if |r| < 1",
+        "<strong>p-series:</strong> Σ 1/nᵖ converges iff p > 1",
+        "<strong>Ratio Test:</strong> L = lim|aₙ₊₁/aₙ|; converges if L < 1",
+        "<strong>Taylor series:</strong> f(x) = Σ f⁽ⁿ⁾(a)/n! · (x−a)ⁿ",
+        "<strong>Maclaurin (a=0):</strong> eˣ = Σ xⁿ/n!, sin x = Σ (−1)ⁿ x²ⁿ⁺¹/(2n+1)!"
+      ]
+    }
+  },
+  {
+    icon: "🔄", name: "Parametric & Polar", sub: "Curves beyond y = f(x)", tag: "bc",
+    content: {
+      intro: "<strong>Parametric equations</strong> express x and y as functions of a parameter t. <strong>Polar coordinates</strong> use (r, θ).",
+      formula: "dy/dx = (dy/dt)/(dx/dt)  ·  Area polar = ½∫r² dθ",
+      points: [
+        "<strong>Parametric slope:</strong> dy/dx = (dy/dt)/(dx/dt)",
+        "<strong>Arc length:</strong> ∫√[(dx/dt)²+(dy/dt)²] dt",
+        "<strong>Polar to rect:</strong> x = r cosθ, y = r sinθ",
+        "<strong>Polar area:</strong> A = ½ ∫[α,β] r² dθ",
+        "<strong>Common curves:</strong> cardioids, lemniscates, rose curves"
+      ]
+    }
+  }
+];
+
+// ─── QUIZ DATA ────────────────────────────────────────────────────────────
+const questions = [
+  { q: "What is the derivative of f(x) = x³ − 5x² + 6x?", choices: ["3x² − 10x + 6","3x² − 5x + 6","x² − 10x + 6","3x² − 10x"], answer: 0, exp: "Apply the power rule to each term: d/dx[x³] = 3x², d/dx[5x²] = 10x, d/dx[6x] = 6." },
+  { q: "Evaluate ∫(4x³ + 2x) dx", choices: ["x⁴ + x² + C","4x⁴ + x² + C","x⁴ + 2x² + C","12x² + 2 + C"], answer: 0, exp: "∫4x³ dx = x⁴ and ∫2x dx = x², so the answer is x⁴ + x² + C." },
+  { q: "lim(x→0) sin(x)/x = ?", choices: ["0","∞","1","undefined"], answer: 2, exp: "This is a fundamental limit. lim(x→0) sin(x)/x = 1. It can be proven using the Squeeze Theorem." },
+  { q: "If f′(x) < 0 on an interval, then f is:", choices: ["Concave up","Increasing","Decreasing","At a local max"], answer: 2, exp: "A negative first derivative means the slope is negative, so f is decreasing on that interval." },
+  { q: "What is the derivative of f(x) = eˣ·sin(x)?", choices: ["eˣcos(x)","eˣ(sin(x)+cos(x))","eˣsin(x)+cos(x)","eˣ(sin(x)−cos(x))"], answer: 1, exp: "Product rule: d/dx[eˣ·sin(x)] = eˣ·sin(x) + eˣ·cos(x) = eˣ(sin(x)+cos(x))." },
+  { q: "∫[0,2] (3x²) dx = ?", choices: ["6","8","12","4"], answer: 1, exp: "Antiderivative of 3x² is x³. Evaluate: 2³ − 0³ = 8." },
+  { q: "At a critical point where f′(c)=0 and f″(c) > 0, f has a:", choices: ["Local maximum","Inflection point","Local minimum","Discontinuity"], answer: 2, exp: "By the Second Derivative Test, f″(c) > 0 means concave up → local minimum." },
+  { q: "Which of these is the chain rule applied to d/dx[sin(x²)]?", choices: ["cos(x²)","2x·cos(x²)","cos(2x)","2cos(x²)"], answer: 1, exp: "Chain rule: d/dx[sin(g(x))] = cos(g(x))·g′(x). Here g(x)=x², g′(x)=2x, so answer is 2x·cos(x²)." },
+  { q: "The geometric series Σ (1/2)ⁿ for n=0 to ∞ equals:", choices: ["1","2","1/2","diverges"], answer: 1, exp: "Geometric series sum = a/(1−r) = 1/(1−½) = 1/(½) = 2." },
+  { q: "dy/dx for parametric x=t², y=t³ at t=2 is:", choices: ["3","3/2","2/3","3t/2"], answer: 1, exp: "dy/dx = (dy/dt)/(dx/dt) = 3t²/(2t) = 3t/2. At t=2: 3(2)/2 = 3." }
+];
+
+// ─── FORMULAS ────────────────────────────────────────────────────────────
+const formulas = [
+  { cat:"Limits", name:"Definition of a Limit", expr:"lim(x→c) f(x) = L", note:"Both one-sided limits must equal L" },
+  { cat:"Limits", name:"L'Hôpital's Rule", expr:"lim f/g = lim f′/g′  (0/0 or ∞/∞)", note:"Differentiate numerator and denominator separately" },
+  { cat:"Derivatives", name:"Power Rule", expr:"d/dx[xⁿ] = nxⁿ⁻¹", note:"Works for any real n" },
+  { cat:"Derivatives", name:"Product Rule", expr:"d/dx[uv] = u′v + uv′", note:"" },
+  { cat:"Derivatives", name:"Quotient Rule", expr:"d/dx[u/v] = (u′v − uv′) / v²", note:"" },
+  { cat:"Derivatives", name:"Chain Rule", expr:"d/dx[f(g(x))] = f′(g(x))·g′(x)", note:"\"Outside times inside derivative\"" },
+  { cat:"Derivatives", name:"Trig Derivatives", expr:"d/dx[sin x]=cos x,  d/dx[cos x]=−sin x", note:"Also: d/dx[tan x]=sec²x" },
+  { cat:"Derivatives", name:"Exponential", expr:"d/dx[eˣ] = eˣ,  d/dx[aˣ] = aˣ ln a", note:"" },
+  { cat:"Derivatives", name:"Logarithm", expr:"d/dx[ln x] = 1/x,  d/dx[logₐx] = 1/(x·ln a)", note:"" },
+  { cat:"Integrals", name:"Power Rule", expr:"∫xⁿ dx = xⁿ⁺¹/(n+1) + C  (n ≠ −1)", note:"" },
+  { cat:"Integrals", name:"∫eˣ", expr:"∫eˣ dx = eˣ + C", note:"" },
+  { cat:"Integrals", name:"∫(1/x)", expr:"∫(1/x) dx = ln|x| + C", note:"" },
+  { cat:"Integrals", name:"∫sin x / ∫cos x", expr:"∫sin x dx = −cos x + C  ·  ∫cos x dx = sin x + C", note:"" },
+  { cat:"FTC", name:"FTC Part 1", expr:"d/dx ∫[a,x] f(t) dt = f(x)", note:"" },
+  { cat:"FTC", name:"FTC Part 2", expr:"∫[a,b] f(x) dx = F(b) − F(a)", note:"F is any antiderivative of f" },
+  { cat:"Applications", name:"MVT (Mean Value Theorem)", expr:"f′(c) = [f(b)−f(a)]/(b−a)  for some c in (a,b)", note:"f must be continuous on [a,b] and differentiable on (a,b)" },
+  { cat:"Applications", name:"Area Between Curves", expr:"∫[a,b] [f(x) − g(x)] dx  where f ≥ g", note:"" },
+  { cat:"Applications", name:"Volume (Disk Method)", expr:"V = π∫[a,b] [f(x)]² dx", note:"Rotating about x-axis" },
+  { cat:"BC — Series", name:"Geometric Series", expr:"Σ arⁿ = a/(1−r)  if |r| < 1", note:"Diverges if |r| ≥ 1" },
+  { cat:"BC — Series", name:"Taylor Series", expr:"f(x) = Σ f⁽ⁿ⁾(a)/n! · (x−a)ⁿ", note:"Centered at a" },
+  { cat:"BC — Series", name:"Maclaurin: eˣ", expr:"eˣ = Σ xⁿ/n! = 1 + x + x²/2! + x³/3! + ...", note:"" },
+  { cat:"BC — Series", name:"Maclaurin: sin x", expr:"sin x = Σ (−1)ⁿ x²ⁿ⁺¹/(2n+1)!", note:"= x − x³/6 + x⁵/120 − ..." },
+];
+
+// ─── GRAPH FUNCTIONS ─────────────────────────────────────────────────────
+const graphFns = [
+  { label:"x²", f: x=>x*x, df: x=>2*x, info:"f(x) = x²  ·  f′(x) = 2x  — a parabola; minimum at x=0" },
+  { label:"x³", f: x=>x*x*x, df: x=>3*x*x, info:"f(x) = x³  ·  f′(x) = 3x²  — inflection point at x=0" },
+  { label:"sin(x)", f: x=>Math.sin(x), df: x=>Math.cos(x), info:"f(x) = sin(x)  ·  f′(x) = cos(x)" },
+  { label:"cos(x)", f: x=>Math.cos(x), df: x=>-Math.sin(x), info:"f(x) = cos(x)  ·  f′(x) = −sin(x)" },
+  { label:"eˣ", f: x=>Math.exp(x), df: x=>Math.exp(x), info:"f(x) = eˣ  ·  f′(x) = eˣ  — its own derivative!" },
+  { label:"ln|x|", f: x=>x!==0?Math.log(Math.abs(x)):null, df: x=>x!==0?1/x:null, info:"f(x) = ln|x|  ·  f′(x) = 1/x  — undefined at x=0" },
+  { label:"1/x", f: x=>x!==0?1/x:null, df: x=>x!==0?-1/(x*x):null, info:"f(x) = 1/x  ·  f′(x) = −1/x²  — discontinuous at x=0" },
+];
+
+// ─── RENDER TOPICS ────────────────────────────────────────────────────────
+function renderTopics() {
+  const grid = document.getElementById('topicGrid');
+  topics.forEach((t, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'topic-card';
+    btn.innerHTML = `
+      <div class="topic-icon">${t.icon}</div>
+      <div class="topic-name">${t.name}</div>
+      <div class="topic-sub">${t.sub}</div>
+      <span class="topic-tag tag-${t.tag}">AP Calc ${t.tag.toUpperCase()}</span>
+    `;
+    btn.onclick = () => showConcept(t, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function showConcept(t, btn) {
+  document.querySelectorAll('.topic-card').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('conceptTitle').textContent = t.icon + '  ' + t.name;
+  const c = t.content;
+  document.getElementById('conceptBody').innerHTML = `
+    <p>${c.intro}</p>
+    <div class="formula-box">${c.formula}</div>
+    <p style="margin-bottom:0.6rem;font-size:0.85rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;font-family:var(--mono)">Key Points</p>
+    <ol class="steps">${c.points.map(p=>`<li>${p}</li>`).join('')}</ol>
+  `;
+}
+
+// ─── CHART ────────────────────────────────────────────────────────────────
+let chart = null;
+let currentFn = 0;
+let currentRange = 6;
+
+function buildDatasets(fnIdx, range) {
+  const fn = graphFns[fnIdx];
+  const pts = [];
+  const N = 200;
+  for (let i = 0; i <= N; i++) {
+    const x = -range + (2*range/N)*i;
+    const y = fn.f(x);
+    pts.push({x, y: y != null && isFinite(y) && Math.abs(y)<50 ? y : null});
+  }
+  const dpts = [];
+  for (let i = 0; i <= N; i++) {
+    const x = -range + (2*range/N)*i;
+    const y = fn.df(x);
+    dpts.push({x, y: y != null && isFinite(y) && Math.abs(y)<50 ? y : null});
+  }
+  return [pts, dpts];
+}
+
+function drawChart() {
+  const [pts, dpts] = buildDatasets(currentFn, currentRange);
+  if (chart) chart.destroy();
+  const ctx = document.getElementById('fnChart').getContext('2d');
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [
+        { label: 'f(x)', data: pts, borderColor: '#7c6dfa', borderWidth: 2, pointRadius: 0, tension: 0, spanGaps: false },
+        { label: "f′(x)", data: dpts, borderColor: '#f0c060', borderWidth: 2, pointRadius: 0, tension: 0, spanGaps: false, borderDash: [5,3] }
+      ]
+    },
+    options: {
+      animation: false,
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        x: { type:'linear', min:-currentRange, max:currentRange, ticks:{color:'#8888aa',font:{family:'DM Mono',size:10}}, grid:{color:'rgba(255,255,255,0.06)'} },
+        y: { ticks:{color:'#8888aa',font:{family:'DM Mono',size:10}}, grid:{color:'rgba(255,255,255,0.06)'} }
+      },
+      plugins: { legend: { labels: { color:'#e8e8f0', font:{family:'DM Mono',size:11} } } }
+    }
+  });
+}
+
+function renderGraphControls() {
+  const wrap = document.getElementById('graphControls');
+  graphFns.forEach((fn, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'fn-btn' + (i===0?' active':'');
+    btn.textContent = fn.label;
+    btn.onclick = () => {
+      document.querySelectorAll('.fn-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFn = i;
+      document.getElementById('graphInfo').textContent = fn.info;
+      drawChart();
+    };
+    wrap.appendChild(btn);
+  });
+  document.getElementById('graphInfo').textContent = graphFns[0].info;
+  document.getElementById('rangeSlider').addEventListener('input', e => {
+    currentRange = parseFloat(e.target.value);
+    document.getElementById('rangeVal').textContent = '±' + currentRange;
+    drawChart();
+  });
+}
+
+// ─── QUIZ ─────────────────────────────────────────────────────────────────
+let qIdx = 0, score = 0;
+const shuffled = [...questions].sort(()=>Math.random()-0.5);
+
+function renderQuiz() {
+  const area = document.getElementById('quizArea');
+  if (qIdx >= shuffled.length) {
+    const pct = Math.round(score/shuffled.length*100);
+    area.innerHTML = `
+      <div class="score-badge">
+        <div class="score-num">${score}/${shuffled.length}</div>
+        <div class="score-label">Score: ${pct}% — ${pct>=80?'Great work! 🎉':pct>=60?'Good effort — review and retry!':'Keep studying and try again!'}</div>
+        <button class="retry-btn" onclick="restartQuiz()">Try Again</button>
+      </div>`;
+    return;
+  }
+  const q = shuffled[qIdx];
+  const pct = (qIdx/shuffled.length)*100;
+  area.innerHTML = `
+    <div class="quiz-counter">Question ${qIdx+1} of ${shuffled.length}  ·  Score: ${score}</div>
+    <div class="progress-bar-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
+    <div class="quiz-card">
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-choices">
+        ${q.choices.map((c,i)=>`<button class="choice-btn" onclick="answer(${i})">${String.fromCharCode(65+i)}) ${c}</button>`).join('')}
+      </div>
+      <div class="quiz-result" id="quizResult"></div>
+      <button class="next-btn" id="nextBtn" onclick="nextQ()">Next Question →</button>
+    </div>`;
+}
+
+function answer(idx) {
+  const q = shuffled[qIdx];
+  const btns = document.querySelectorAll('.choice-btn');
+  btns.forEach(b=>b.style.pointerEvents='none');
+  const res = document.getElementById('quizResult');
+  const nb = document.getElementById('nextBtn');
+  if (idx === q.answer) {
+    btns[idx].classList.add('correct');
+    score++;
+    res.className = 'quiz-result show correct-res';
+    res.textContent = '✓ Correct! ' + q.exp;
+  } else {
+    btns[idx].classList.add('wrong');
+    btns[q.answer].classList.add('correct');
+    res.className = 'quiz-result show wrong-res';
+    res.textContent = '✗ Incorrect. ' + q.exp;
+  }
+  nb.className = 'next-btn show';
+}
+
+function nextQ() { qIdx++; renderQuiz(); }
+function restartQuiz() { qIdx=0; score=0; renderQuiz(); }
+
+// ─── FORMULAS ────────────────────────────────────────────────────────────
+function renderFormulas() {
+  const grid = document.getElementById('formulaGrid');
+  formulas.forEach(f => {
+    const card = document.createElement('div');
+    card.className = 'formula-card';
+    card.innerHTML = `
+      <div class="formula-cat">${f.cat}</div>
+      <div class="formula-name">${f.name}</div>
+      <div class="formula-expr">${f.expr}</div>
+      ${f.note ? `<div class="formula-note">${f.note}</div>` : ''}
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────
+renderTopics();
+renderGraphControls();
+renderFormulas();
+renderQuiz();
+setTimeout(drawChart, 100);
+</script>
+</body>
+</html>
