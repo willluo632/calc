@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>∫ Integral Practice — Calc BC</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+  :root {
+    --ink: #0f0e0c;
+    --paper: #f5f1e8;
+    --cream: #ede8da;
+    --rule: #c8bfaa;
+    --accent: #c0392b;
+    --accent2: #1a5276;
+    --accent3: #1e8449;
+    --gold: #b7860b;
+    --muted: #7a7060;
+    --card: #faf8f3;
+    --shadow: rgba(15,14,12,0.10);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      90deg, transparent, transparent 60px,
+      rgba(255,255,255,.03) 60px, rgba(255,255,255,.03) 61px
+    ),
+    repeating-linear-gradient(
+      0deg, transparent, transparent 60px,
+      rgba(255,255,255,.03) 60px, rgba(255,255,255,.03) 61px
+    );
+  }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--rule);
+    margin-bottom: .75rem;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    letter-spacing: -.02em;
+    line-height: 1.1;
+    margin-bottom: .5rem;
+  }
+  header h1 span { color: var(--accent); }
+  .header-sub {
+    font-size: .95rem;
+    color: var(--rule);
+    font-weight: 300;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* ── NAV TABS ── */
+  nav {
+    background: var(--cream);
+    border-bottom: 2px solid var(--rule);
+    overflow-x: auto;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+  nav ul {
+    display: inline-flex;
+    list-style: none;
+    padding: 0 1rem;
+    gap: 0;
+  }
+  nav ul li a {
+    display: inline-block;
+    padding: .85rem 1.25rem;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: .8rem;
+    font-weight: 500;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    border-bottom: 3px solid transparent;
+    transition: color .2s, border-color .2s;
+    font-family: 'DM Mono', monospace;
+  }
+  nav ul li a:hover { color: var(--ink); border-bottom-color: var(--rule); }
+  nav ul li a.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── MAIN LAYOUT ── */
+  main { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+
+  /* ── SECTION ── */
+  .section { display: none; animation: fadeIn .3s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1.5px solid var(--rule);
+  }
+  .section-icon {
+    font-size: 2rem;
+    line-height: 1;
+    margin-top: .15rem;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.9rem;
+    letter-spacing: -.02em;
+    line-height: 1.1;
+  }
+  .section-header p {
+    font-size: .9rem;
+    color: var(--muted);
+    margin-top: .4rem;
+    line-height: 1.6;
+  }
+
+  /* ── FORMULA STRIP ── */
+  .formula-strip {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 8px;
+    padding: 1rem 1.4rem;
+    margin-bottom: 2rem;
+    font-size: .88rem;
+  }
+  .formula-strip .fs-label {
+    font-family: 'DM Mono', monospace;
+    font-size: .65rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--rule);
+    margin-bottom: .5rem;
+  }
+  .formula-strip .fs-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1.5rem;
+    align-items: center;
+  }
+  .formula-strip .fs-item {
+    color: #e8dfc9;
+    font-family: 'DM Mono', monospace;
+    font-size: .82rem;
+  }
+
+  /* ── PROBLEM CARD ── */
+  .problems-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1.5px solid var(--rule);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow .2s, transform .15s;
+  }
+  .card:hover { box-shadow: 0 4px 20px var(--shadow); transform: translateY(-1px); }
+
+  .card-question {
+    padding: 1.1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+  }
+  .prob-num {
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: .08em;
+    flex-shrink: 0;
+    min-width: 2rem;
+  }
+  .prob-math {
+    flex: 1;
+    font-size: 1.05rem;
+    overflow-x: auto;
+    display: flex;
+    align-items: center;
+  }
+  .prob-diff {
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+    font-size: .65rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .2rem .55rem;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .diff-easy { background: #d5f0dc; color: #1e7a40; }
+  .diff-med  { background: #fdebd0; color: #b7571a; }
+  .diff-hard { background: #fadbd8; color: #c0392b; }
+
+  .reveal-btn {
+    margin: 0 1.4rem 1rem;
+    background: none;
+    border: 1.5px solid var(--rule);
+    border-radius: 6px;
+    padding: .45rem 1rem;
+    font-family: 'DM Mono', monospace;
+    font-size: .72rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--muted);
+    transition: background .2s, color .2s, border-color .2s;
+  }
+  .reveal-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .solution {
+    display: none;
+    background: #f0ece0;
+    border-top: 1.5px solid var(--rule);
+    padding: 1.1rem 1.4rem;
+  }
+  .solution.open { display: block; animation: fadeIn .25s ease; }
+  .solution .sol-label {
+    font-family: 'DM Mono', monospace;
+    font-size: .65rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .6rem;
+  }
+  .solution .sol-steps {
+    font-size: .92rem;
+    line-height: 1.8;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: .1rem;
+  }
+  .solution .sol-final {
+    margin-top: .75rem;
+    padding: .6rem 1.2rem;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 6px;
+    font-size: .95rem;
+    display: inline-block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .solution .sol-final .katex { color: var(--paper); }
+
+  /* ── SCORE ── */
+  .score-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--cream);
+    border: 1.5px solid var(--rule);
+    border-radius: 8px;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1.75rem;
+    font-family: 'DM Mono', monospace;
+    font-size: .78rem;
+  }
+  .score-bar .sc-label { color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+  .score-bar .sc-val { color: var(--accent); font-size: 1.1rem; font-weight: 500; }
+  .score-bar .sc-reset {
+    margin-left: auto;
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: .3rem .7rem;
+    cursor: pointer;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: .65rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    transition: all .15s;
+  }
+  .score-bar .sc-reset:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* Self-check buttons */
+  .self-check {
+    display: flex;
+    gap: .5rem;
+    margin: .75rem 1.4rem 1rem;
+  }
+  .sc-btn {
+    flex: 1;
+    border: none;
+    border-radius: 6px;
+    padding: .45rem;
+    font-family: 'DM Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .sc-btn:hover { opacity: .8; }
+  .sc-got { background: #d5f0dc; color: #1a5c2e; }
+  .sc-not { background: #fadbd8; color: #922b21; }
+  .sc-btn.selected { outline: 2px solid currentColor; }
+
+  /* ── REFERENCE PAGE ── */
+  .ref-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .ref-card {
+    background: var(--card);
+    border: 1.5px solid var(--rule);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+  }
+  .ref-card h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: .68rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .75rem;
+  }
+  .ref-item { font-size: .9rem; margin-bottom: .4rem; }
+
+  /* KaTeX */
+  .katex-display { overflow-x: auto; overflow-y: hidden; padding: .25rem 0; }
+  .katex { font-size: 1.05em; }
+  .prob-math .katex { font-size: 1.1em; }
+  .sol-final .katex { font-size: 1.1em; }
+  .step-row { margin-bottom: .45rem; line-height: 1.75; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">AP Calculus BC · Integration Methods</div>
+  <h1>Practice <span>Integrals</span></h1>
+  <p class="header-sub">Drill every technique on the BC exam — click any problem to reveal its step-by-step solution.</p>
+</header>
+
+<nav id="main-nav">
+  <ul>
+    <li><a href="#" data-tab="basic" class="active">Basic Rules</a></li>
+    <li><a href="#" data-tab="usub">u-Sub</a></li>
+    <li><a href="#" data-tab="parts">By Parts</a></li>
+    <li><a href="#" data-tab="trig">Trig Integrals</a></li>
+    <li><a href="#" data-tab="trigsub">Trig Sub</a></li>
+    <li><a href="#" data-tab="partial">Partial Fractions</a></li>
+    <li><a href="#" data-tab="improper">Improper</a></li>
+    <li><a href="#" data-tab="ref">📋 Reference</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ════════════════════════════════════════════
+     1. BASIC RULES
+════════════════════════════════════════════ -->
+<section class="section active" id="tab-basic">
+  <div class="section-header">
+    <div class="section-icon">📐</div>
+    <div>
+      <h2>Basic Integration Rules</h2>
+      <p>Power rule, exponentials, basic trig, and definite integrals — the foundation of every BC problem.</p>
+    </div>
+  </div>
+
+  <div class="formula-strip">
+    <div class="fs-label">Key Formulas</div>
+    <div class="fs-row">
+      <span class="fs-item">\(\int x^n\,dx = \tfrac{x^{n+1}}{n+1}+C\)</span>
+      <span class="fs-item">\(\int e^x\,dx = e^x+C\)</span>
+      <span class="fs-item">\(\int \tfrac{1}{x}\,dx = \ln|x|+C\)</span>
+      <span class="fs-item">\(\int \sin x\,dx = -\cos x+C\)</span>
+      <span class="fs-item">\(\int \cos x\,dx = \sin x+C\)</span>
+    </div>
+  </div>
+
+  <div class="score-bar" id="score-basic">
+    <span class="sc-label">Score</span>
+    <span class="sc-val" id="sv-basic">0 / 0</span>
+    <button class="sc-reset" onclick="resetScore('basic')">Reset</button>
+  </div>
+
+  <div class="problems-grid" id="pg-basic"></div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     2. U-SUBSTITUTION
+════════════════════════════════════════════ -->
+<section class="section" id="tab-usub">
+  <div class="section-header">
+    <div class="section-icon">🔄</div>
+    <div>
+      <h2>u-Substitution</h2>
+      <p>Reverse the chain rule. Spot the inside function, let \(u\) equal it, find \(du\), rewrite, integrate, back-substitute.</p>
+    </div>
+  </div>
+
+  <div class="formula-strip">
+    <div class="fs-label">Strategy</div>
+    <div class="fs-row">
+      <span class="fs-item">Let \(u = g(x)\), so \(du = g'(x)\,dx\)</span>
+      <span class="fs-item">\(\displaystyle\int f(g(x))\,g'(x)\,dx = \int f(u)\,du\)</span>
+    </div>
+  </div>
+
+  <div class="score-bar">
+    <span class="sc-label">Score</span>
+    <span class="sc-val" id="sv-usub">0 / 0</span>
+    <button class="sc-reset" onclick="resetScore('usub')">Reset</button>
+  </div>
+
+  <div class="problems-grid" id="pg-usub"></div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     3. INTEGRATION BY PARTS
+════════════════════════════════════════════ -->
+<section class="section" id="tab-parts">
+  <div class="section-header">
+    <div class="section-icon">✂️</div>
+    <div>
+      <h2>Integration by Parts</h2>
+      <p>Reverse the product rule. Use LIATE to choose \(u\): Logarithms, Inverse trig, Algebraic, Trig, Exponential.</p>
+    </div>
+  </div>
+
+  <div class="formula-strip">
+    <div class="fs-label">Formula</div>
+    <div class="fs-row">
+      <span class="fs-item">\(\displaystyle\int u\,dv = uv - \int v\,du\)</span>
+    </div>
+  </div>
+
+  <div class="score-bar">
+    <span class="sc-label">Score</span>
+    <span class="sc-val" id="sv-parts">0 / 0</span>
+    <button class="sc-reset" onclick="resetScore('parts')">Reset</button>
+  </div>
+
+  <div class="problems-grid" id="pg-parts"></div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     4. TRIG INTEGRALS
+════════════════════════════════════════════ -->
+<section class="section" id="tab-trig">
+  <div class="section-header">
+    <div class="section-icon">🌊</div>
+    <div>
+      <h2>Trig Integrals</h2>
+      <p>Products and powers of sine, cosine, secant, and tangent. Lean on Pythagorean and half-angle identities.</p>
+    </div>
+  </div>
+
+  <div class="formula-strip">
+    <div class="fs-label">Key Identities</div>
+    <div class="fs-row">
+      <span class="fs-item">\(\sin^2\!x = \tfrac{1-\cos 2x}{2}\)</span>
+      <span class="fs-item">\(\cos^2\!x = \tfrac{1+\cos 2x}{2}\)</span>
+      <span class="fs-item">\(\sin^2\!x+\cos^2\!x=1\)</span>
+      <span class="fs-item">\(\tan^2\!x+1=\sec^2\!x\)</span>
+    </div>
+  </div>
+
+  <div class="score-bar">
+    <span class="sc-label">Score</span>
+    <span class="sc-val" id="sv-trig">0 / 0</span>
+    <button class="sc-reset" onclick="resetScore('trig')">Reset</button>
+  </div>
+
+  <div class="problems-grid" id="pg-trig"></div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     5. TRIG SUBSTITUTION
+════════════════════════════════════════════ -->
+<section class="section" id="tab-trigsub">
+  <div class="section-header">
+    <div class="section-icon">📐</div>
+    <div>
+      <h2>Trigonometric Substitution</h2>
+      <p>Eliminate radicals containing \(a^2-x^2\), \(a^2+x^2\), or \(x^2-a^2\) by a clever trig replacement.</p>
+    </div>
+  </div>
+
+  <div class="formula-strip">
+    <div class="fs-label">Substitution Table</div>
+    <div class="fs-row">
+      <span class="fs-item">\(\sqrt{a^2-x^2}\): let \(x=a\sin\theta\)</span>
+      <span class="fs-item">\(\sqrt{a^2+x^2}\): let \(x=a\tan\theta\)</span>
+      <span class="fs-item">\(\sqrt{x^2-a^2}\): let \(x=a\sec\theta\)</span>
+    </div>
+  </div>
+
+  <div class="score-bar">
+    <span class="sc-label">Score</span>
+    <span class="sc-val" id="sv-trigsub">0 / 0</span>
+    <button class="sc-reset" onclick="resetScore('trigsub')">Reset</button>
+  </div>
+
+  <div class="problems-grid" id="pg-trigsub"></div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     6. PARTIAL FRACTIONS
+════════════════════════════════════════════ -->
+<section class="section" id="tab-partial">
+  <div class="section-header">
+    <div class="section-icon">🧩</div>
+    <div>
+      <h2>Partial Fraction Decomposition</h2>
+      <p>Break a rational function into simpler fractions whose integrals you already know.</p>
+    </div>
+  </div>
+
+  <div class="formula-strip">
+    <div class="fs-label">Template</div>
+    <div class="fs-row">
+      <span class="fs-item">\(\dfrac{P(x)}{(x-a)(x-b)} = \dfrac{A}{x-a}+\dfrac{B}{x-b}\)</span>
+      <span class="fs-item">\(\int\!\tfrac{1}{x-a}dx = \ln|x-a|+C\)</span>
+    </div>
+  </div>
+
+  <div class="score-bar">
+    <span class="sc-label">Score</span>
+    <span class="sc-val" id="sv-partial">0 / 0</span>
+    <button class="sc-reset" onclick="resetScore('partial')">Reset</button>
+  </div>
+
+  <div class="problems-grid" id="pg-partial"></div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     7. IMPROPER INTEGRALS
+════════════════════════════════════════════ -->
+<section class="section" id="tab-improper">
+  <div class="section-header">
+    <div class="section-icon">∞</div>
+    <div>
+      <h2>Improper Integrals</h2>
+      <p>Infinite limits or discontinuous integrands — replace the bad endpoint with a limit and evaluate.</p>
+    </div>
+  </div>
+
+  <div class="formula-strip">
+    <div class="fs-label">Definition</div>
+    <div class="fs-row">
+      <span class="fs-item">\(\displaystyle\int_a^\infty f\,dx = \lim_{t\to\infty}\int_a^t f\,dx\)</span>
+      <span class="fs-item">\(\displaystyle\int_1^\infty \tfrac{1}{x^p}\,dx\) converges iff \(p>1\)</span>
+    </div>
+  </div>
+
+  <div class="score-bar">
+    <span class="sc-label">Score</span>
+    <span class="sc-val" id="sv-improper">0 / 0</span>
+    <button class="sc-reset" onclick="resetScore('improper')">Reset</button>
+  </div>
+
+  <div class="problems-grid" id="pg-improper"></div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     8. REFERENCE
+════════════════════════════════════════════ -->
+<section class="section" id="tab-ref">
+  <div class="section-header">
+    <div class="section-icon">📋</div>
+    <div>
+      <h2>Quick Reference Sheet</h2>
+      <p>All formulas you need for the BC exam in one place.</p>
+    </div>
+  </div>
+  <div class="ref-grid">
+    <div class="ref-card">
+      <h4>Power & Log</h4>
+      <div class="ref-item">\(\int x^n\,dx = \tfrac{x^{n+1}}{n+1}+C\quad(n\neq-1)\)</div>
+      <div class="ref-item">\(\int \tfrac{1}{x}\,dx = \ln|x|+C\)</div>
+      <div class="ref-item">\(\int e^x\,dx = e^x+C\)</div>
+      <div class="ref-item">\(\int a^x\,dx = \tfrac{a^x}{\ln a}+C\)</div>
+      <div class="ref-item">\(\int \ln x\,dx = x\ln x - x+C\)</div>
+    </div>
+    <div class="ref-card">
+      <h4>Basic Trig</h4>
+      <div class="ref-item">\(\int \sin x\,dx = -\cos x+C\)</div>
+      <div class="ref-item">\(\int \cos x\,dx = \sin x+C\)</div>
+      <div class="ref-item">\(\int \sec^2\!x\,dx = \tan x+C\)</div>
+      <div class="ref-item">\(\int \csc^2\!x\,dx = -\cot x+C\)</div>
+      <div class="ref-item">\(\int \sec x\tan x\,dx = \sec x+C\)</div>
+      <div class="ref-item">\(\int \sec x\,dx = \ln|\sec x+\tan x|+C\)</div>
+      <div class="ref-item">\(\int \tan x\,dx = \ln|\sec x|+C\)</div>
+    </div>
+    <div class="ref-card">
+      <h4>Inverse Trig</h4>
+      <div class="ref-item">\(\int \tfrac{1}{\sqrt{1-x^2}}\,dx = \arcsin x+C\)</div>
+      <div class="ref-item">\(\int \tfrac{1}{1+x^2}\,dx = \arctan x+C\)</div>
+      <div class="ref-item">\(\int \tfrac{1}{x\sqrt{x^2-1}}\,dx = \text{arcsec}|x|+C\)</div>
+    </div>
+    <div class="ref-card">
+      <h4>By Parts</h4>
+      <div class="ref-item">\(\int u\,dv = uv - \int v\,du\)</div>
+      <div class="ref-item"><strong>LIATE:</strong> Log · Inv-trig · Alg · Trig · Exp</div>
+    </div>
+    <div class="ref-card">
+      <h4>Trig Identities</h4>
+      <div class="ref-item">\(\sin^2\!x = \tfrac{1-\cos 2x}{2}\)</div>
+      <div class="ref-item">\(\cos^2\!x = \tfrac{1+\cos 2x}{2}\)</div>
+      <div class="ref-item">\(\sin 2x = 2\sin x\cos x\)</div>
+      <div class="ref-item">\(\tan^2\!x = \sec^2\!x - 1\)</div>
+      <div class="ref-item">\(\cot^2\!x = \csc^2\!x - 1\)</div>
+    </div>
+    <div class="ref-card">
+      <h4>Trig Sub</h4>
+      <div class="ref-item">\(\sqrt{a^2-x^2}\Rightarrow x=a\sin\theta\)</div>
+      <div class="ref-item">\(\sqrt{a^2+x^2}\Rightarrow x=a\tan\theta\)</div>
+      <div class="ref-item">\(\sqrt{x^2-a^2}\Rightarrow x=a\sec\theta\)</div>
+    </div>
+    <div class="ref-card">
+      <h4>Partial Fractions</h4>
+      <div class="ref-item">\(\tfrac{P}{(x-a)(x-b)} = \tfrac{A}{x-a}+\tfrac{B}{x-b}\)</div>
+      <div class="ref-item">\(\tfrac{P}{(x-a)^2} = \tfrac{A}{x-a}+\tfrac{B}{(x-a)^2}\)</div>
+      <div class="ref-item">\(\tfrac{P}{x^2+bx+c} = \tfrac{Ax+B}{x^2+bx+c}\)</div>
+    </div>
+    <div class="ref-card">
+      <h4>Improper Integrals</h4>
+      <div class="ref-item">\(\int_1^\infty x^{-p}dx\) conv. iff \(p>1\)</div>
+      <div class="ref-item">\(\int_0^1 x^{-p}dx\) conv. iff \(p < 1\)</div>
+      <div class="ref-item">\(\int_{-\infty}^\infty e^{-x^2}dx = \sqrt{\pi}\)</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// PROBLEM DATA
+// ═══════════════════════════════════════════════════════════
+const PROBLEMS = {
+  basic: [
+    {
+      q: `\\int (t^2 + 1 + \\tfrac{1}{t^2+1})\\,dt`,
+      diff: 'easy',
+      steps: `Split into three integrals: \\(\\int t^2\\,dt + \\int 1\\,dt + \\int \\frac{1}{t^2+1}\\,dt\\).
+Apply the power rule to the first two and the arctan formula to the third.`,
+      ans: `\\dfrac{t^3}{3} + t + \\arctan t + C`
+    },
+    {
+      q: `\\int_1^2 \\!\\left(x^2 - \\dfrac{2}{x}\\right)dx`,
+      diff: 'easy',
+      steps: `Antiderivative: \\(\\frac{x^3}{3} - 2\\ln|x|\\).
+Evaluate at 2: \\(\\frac{8}{3}-2\\ln 2\\). Evaluate at 1: \\(\\frac{1}{3}-0\\).
+Subtract: \\(\\frac{8}{3}-\\frac{1}{3}-2\\ln 2\\).`,
+      ans: `\\dfrac{7}{3} - 2\\ln 2`
+    },
+    {
+      q: `\\int (2^x + x^2)\\,dx`,
+      diff: 'easy',
+      steps: `For \\(2^x\\): \\(\\int 2^x\\,dx = \\tfrac{2^x}{\\ln 2}\\). For \\(x^2\\): power rule gives \\(\\tfrac{x^3}{3}\\).`,
+      ans: `\\dfrac{2^x}{\\ln 2} + \\dfrac{x^3}{3} + C`
+    },
+    {
+      q: `\\int \\frac{x^3+5x-2}{\\sqrt{x}}\\,dx`,
+      diff: 'med',
+      steps: `Divide each term by \\(x^{1/2}\\): \\(x^{5/2}+5x^{1/2}-2x^{-1/2}\\).
+Apply the power rule term-by-term.`,
+      ans: `\\dfrac{2x^{7/2}}{7} + \\dfrac{10x^{3/2}}{3} - 4x^{1/2} + C`
+    },
+    {
+      q: `\\int_0^{\\pi/3}\\sec^2(2x)\\,dx`,
+      diff: 'med',
+      steps: `Antiderivative of \\(\\sec^2(2x)\\) is \\(\\tfrac{1}{2}\\tan(2x)\\) (chain rule factor of \\(\\tfrac{1}{2}\\)).
+Evaluate from 0 to \\(\\pi/3\\): \\(\\frac{1}{2}[\\tan(2\\pi/3)-\\tan(0)] = \\frac{1}{2}(-\\sqrt{3}-0)\\).`,
+      ans: `-\\dfrac{\\sqrt{3}}{2}`
+    },
+    {
+      q: `\\int_0^{\\pi/4}\\frac{1+\\cos^2\\theta}{\\cos^2\\theta}\\,d\\theta`,
+      diff: 'med',
+      steps: `Split: \\(\\int_0^{\\pi/4}\\sec^2\\theta\\,d\\theta + \\int_0^{\\pi/4}1\\,d\\theta\\).
+Antiderivatives: \\([\\tan\\theta + \\theta]_0^{\\pi/4} = 1+\\tfrac{\\pi}{4}\\).`,
+      ans: `1 + \\dfrac{\\pi}{4}`
+    },
+    {
+      q: `\\int_0^{\\sqrt{2}/2}\\frac{2}{\\sqrt{1-x^2}}\\,dx`,
+      diff: 'easy',
+      steps: `Recognize \\(\\int \\frac{1}{\\sqrt{1-x^2}}\\,dx = \\arcsin x\\).
+Evaluate: \\(2[\\arcsin x]_0^{\\sqrt{2}/2} = 2(\\tfrac{\\pi}{4}-0)\\).`,
+      ans: `\\dfrac{\\pi}{2}`
+    },
+    {
+      q: `\\int \\!\\left(\\sqrt{3}+e^{2t}-\\cos(5t)\\right)dt`,
+      diff: 'easy',
+      steps: `Three separate antiderivatives: \\(\\sqrt{3}\\,t\\), \\(\\tfrac{e^{2t}}{2}\\) (chain rule), \\(-\\tfrac{\\sin(5t)}{5}\\) (chain rule).`,
+      ans: `\\sqrt{3}\\,t + \\dfrac{e^{2t}}{2} - \\dfrac{\\sin(5t)}{5} + C`
+    },
+  ],
+
+  usub: [
+    {
+      q: `\\int x\\,e^{x^2}\\,dx`,
+      diff: 'easy',
+      steps: `Let \\(u=x^2\\), so \\(du=2x\\,dx\\Rightarrow x\\,dx=\\tfrac{du}{2}\\).
+Integral becomes \\(\\tfrac{1}{2}\\int e^u\\,du = \\tfrac{1}{2}e^u\\). Back-sub: \\(u=x^2\\).`,
+      ans: `\\dfrac{1}{2}e^{x^2}+C`
+    },
+    {
+      q: `\\int \\frac{\\ln x}{x}\\,dx`,
+      diff: 'easy',
+      steps: `Let \\(u=\\ln x\\), so \\(du=\\tfrac{1}{x}\\,dx\\).
+Integral: \\(\\int u\\,du = \\tfrac{u^2}{2}\\). Back-sub.`,
+      ans: `\\dfrac{(\\ln x)^2}{2}+C`
+    },
+    {
+      q: `\\int \\frac{e^x}{1+e^{2x}}\\,dx`,
+      diff: 'med',
+      steps: `Let \\(u=e^x\\), \\(du=e^x\\,dx\\).
+Integral becomes \\(\\int\\frac{du}{1+u^2} = \\arctan u\\). Back-sub.`,
+      ans: `\\arctan(e^x)+C`
+    },
+    {
+      q: `\\int \\sin^5 x\\cos x\\,dx`,
+      diff: 'easy',
+      steps: `Let \\(u=\\sin x\\), \\(du=\\cos x\\,dx\\).
+Integral: \\(\\int u^5\\,du = \\tfrac{u^6}{6}\\). Back-sub.`,
+      ans: `\\dfrac{\\sin^6 x}{6}+C`
+    },
+    {
+      q: `\\int_0^1 x\\sqrt{1+x^2}\\,dx`,
+      diff: 'med',
+      steps: `Let \\(u=1+x^2\\), \\(du=2x\\,dx\\). Limits: \\(u(0)=1\\), \\(u(1)=2\\).
+\\(\\tfrac{1}{2}\\int_1^2 u^{1/2}\\,du = \\tfrac{1}{2}\\cdot\\tfrac{2}{3}[u^{3/2}]_1^2 = \\tfrac{1}{3}(2^{3/2}-1)\\).`,
+      ans: `\\dfrac{2\\sqrt{2}-1}{3}`
+    },
+    {
+      q: `\\int \\frac{2x+3}{x^2+3x+7}\\,dx`,
+      diff: 'med',
+      steps: `Note the numerator \\(2x+3\\) is exactly the derivative of \\(x^2+3x+7\\).
+Let \\(u=x^2+3x+7\\), \\(du=(2x+3)\\,dx\\).
+Integral: \\(\\int\\frac{du}{u}=\\ln|u|\\). Back-sub.`,
+      ans: `\\ln|x^2+3x+7|+C`
+    },
+    {
+      q: `\\int \\tan x\\,dx`,
+      diff: 'easy',
+      steps: `Write as \\(\\int\\frac{\\sin x}{\\cos x}\\,dx\\). Let \\(u=\\cos x\\), \\(du=-\\sin x\\,dx\\).
+Integral: \\(-\\int\\frac{du}{u}=-\\ln|u|\\). Back-sub.`,
+      ans: `\\ln|\\sec x|+C`
+    },
+    {
+      q: `\\int \\frac{dx}{x\\ln x}`,
+      diff: 'med',
+      steps: `Let \\(u=\\ln x\\), \\(du=\\tfrac{dx}{x}\\).
+Integral becomes \\(\\int\\frac{du}{u}=\\ln|u|\\). Back-sub.`,
+      ans: `\\ln|\\ln x|+C`
+    },
+  ],
+
+  parts: [
+    {
+      q: `\\int x\\,e^x\\,dx`,
+      diff: 'easy',
+      steps: `LIATE: let \\(u=x\\), \\(dv=e^x\\,dx\\Rightarrow du=dx\\), \\(v=e^x\\).
+\\(\\int x e^x\\,dx = xe^x - \\int e^x\\,dx = xe^x - e^x\\).`,
+      ans: `e^x(x-1)+C`
+    },
+    {
+      q: `\\int x\\ln x\\,dx`,
+      diff: 'easy',
+      steps: `LIATE: \\(u=\\ln x\\), \\(dv=x\\,dx\\Rightarrow du=\\tfrac{1}{x}dx\\), \\(v=\\tfrac{x^2}{2}\\).
+\\(\\tfrac{x^2}{2}\\ln x - \\int\\tfrac{x^2}{2}\\cdot\\tfrac{1}{x}\\,dx = \\tfrac{x^2}{2}\\ln x - \\tfrac{x^2}{4}\\).`,
+      ans: `\\dfrac{x^2}{2}\\ln x - \\dfrac{x^2}{4}+C`
+    },
+    {
+      q: `\\int x^2\\sin x\\,dx`,
+      diff: 'med',
+      steps: `Apply IBP twice. First: \\(u=x^2\\), \\(dv=\\sin x\\,dx\\): gives \\(-x^2\\cos x+2\\int x\\cos x\\,dx\\).
+Second IBP on \\(\\int x\\cos x\\,dx\\): \\(u=x\\), \\(dv=\\cos x\\,dx\\): gives \\(x\\sin x-\\int\\sin x\\,dx = x\\sin x+\\cos x\\).
+Combine.`,
+      ans: `-x^2\\cos x + 2x\\sin x + 2\\cos x+C`
+    },
+    {
+      q: `\\int e^x\\sin x\\,dx`,
+      diff: 'hard',
+      steps: `IBP with \\(u=\\sin x\\), \\(dv=e^x\\,dx\\): \\(e^x\\sin x - \\int e^x\\cos x\\,dx\\).
+IBP again on \\(\\int e^x\\cos x\\,dx\\): \\(e^x\\cos x + \\int e^x\\sin x\\,dx\\).
+Let \\(I=\\int e^x\\sin x\\,dx\\): \\(I = e^x\\sin x - e^x\\cos x - I\\Rightarrow 2I = e^x(\\sin x-\\cos x)\\).`,
+      ans: `\\dfrac{e^x(\\sin x - \\cos x)}{2}+C`
+    },
+    {
+      q: `\\int \\arctan x\\,dx`,
+      diff: 'med',
+      steps: `\\(u=\\arctan x\\), \\(dv=dx\\Rightarrow du=\\tfrac{dx}{1+x^2}\\), \\(v=x\\).
+\\(x\\arctan x - \\int\\tfrac{x}{1+x^2}\\,dx\\). For the remaining integral let \\(w=1+x^2\\): \\(\\tfrac{1}{2}\\ln(1+x^2)\\).`,
+      ans: `x\\arctan x - \\dfrac{\\ln(1+x^2)}{2}+C`
+    },
+    {
+      q: `\\int x^2 e^x\\,dx`,
+      diff: 'med',
+      steps: `Use the tabular method (repeated IBP). Derivatives column: \\(x^2,2x,2,0\\). Integrals column: \\(e^x,e^x,e^x,e^x\\).
+Sum with alternating signs: \\(x^2e^x - 2xe^x + 2e^x\\).`,
+      ans: `e^x(x^2-2x+2)+C`
+    },
+    {
+      q: `\\int \\ln x\\,dx`,
+      diff: 'easy',
+      steps: `\\(u=\\ln x\\), \\(dv=dx\\Rightarrow du=\\tfrac{dx}{x}\\), \\(v=x\\).
+\\(x\\ln x - \\int x\\cdot\\tfrac{1}{x}\\,dx = x\\ln x - \\int 1\\,dx\\).`,
+      ans: `x\\ln x - x + C`
+    },
+    {
+      q: `\\int_1^e x^3\\ln x\\,dx`,
+      diff: 'hard',
+      steps: `\\(u=\\ln x\\), \\(dv=x^3\\,dx\\Rightarrow du=\\tfrac{dx}{x}\\), \\(v=\\tfrac{x^4}{4}\\).
+\\(\\left[\\tfrac{x^4}{4}\\ln x\\right]_1^e - \\int_1^e\\tfrac{x^3}{4}\\,dx = \\tfrac{e^4}{4} - \\left[\\tfrac{x^4}{16}\\right]_1^e = \\tfrac{e^4}{4} - \\tfrac{e^4-1}{16}\\).`,
+      ans: `\\dfrac{3e^4+1}{16}`
+    },
+  ],
+
+  trig: [
+    {
+      q: `\\int \\sin^2 x\\,dx`,
+      diff: 'easy',
+      steps: `Use \\(\\sin^2 x = \\tfrac{1-\\cos 2x}{2}\\).
+\\(\\int\\tfrac{1-\\cos 2x}{2}\\,dx = \\tfrac{x}{2} - \\tfrac{\\sin 2x}{4}\\).`,
+      ans: `\\dfrac{x}{2} - \\dfrac{\\sin 2x}{4}+C`
+    },
+    {
+      q: `\\int \\sin^3 x\\,dx`,
+      diff: 'med',
+      steps: `Write \\(\\sin^3 x = \\sin x(1-\\cos^2 x)\\).
+\\(\\int\\sin x\\,dx - \\int\\sin x\\cos^2 x\\,dx\\). For the second, let \\(u=\\cos x\\): \\(-(-\\cos x)+\\tfrac{\\cos^3 x}{3}\\).`,
+      ans: `-\\cos x + \\dfrac{\\cos^3 x}{3}+C`
+    },
+    {
+      q: `\\int \\sin^2 x\\cos^2 x\\,dx`,
+      diff: 'med',
+      steps: `Use \\(\\sin^2 x\\cos^2 x = \\tfrac{\\sin^2 2x}{4} = \\tfrac{1-\\cos 4x}{8}\\).
+Integrate term by term.`,
+      ans: `\\dfrac{x}{8} - \\dfrac{\\sin 4x}{32}+C`
+    },
+    {
+      q: `\\int \\tan^2 x\\,dx`,
+      diff: 'easy',
+      steps: `Use \\(\\tan^2 x = \\sec^2 x - 1\\).
+\\(\\int(\\sec^2 x-1)\\,dx = \\tan x - x\\).`,
+      ans: `\\tan x - x+C`
+    },
+    {
+      q: `\\int \\sec^3 x\\,dx`,
+      diff: 'hard',
+      steps: `IBP: \\(u=\\sec x\\), \\(dv=\\sec^2 x\\,dx\\): gives \\(\\sec x\\tan x - \\int\\sec x\\tan^2 x\\,dx\\).
+Replace \\(\\tan^2 x=\\sec^2 x-1\\): \\(I = \\sec x\\tan x - \\int\\sec^3 x\\,dx + \\int\\sec x\\,dx\\).
+\\(2I = \\sec x\\tan x + \\ln|\\sec x+\\tan x|\\).`,
+      ans: `\\dfrac{\\sec x\\tan x + \\ln|\\sec x+\\tan x|}{2}+C`
+    },
+    {
+      q: `\\int_0^{\\pi/2}\\sin^2 x\\cos^2 x\\,dx`,
+      diff: 'med',
+      steps: `Using \\(\\sin^2 x\\cos^2 x = \\tfrac{1-\\cos 4x}{8}\\): \\(\\int_0^{\\pi/2}\\tfrac{1-\\cos 4x}{8}\\,dx = \\tfrac{1}{8}\\left[x-\\tfrac{\\sin 4x}{4}\\right]_0^{\\pi/2}\\).
+\\(=\\tfrac{1}{8}(\\tfrac{\\pi}{2}-0) = \\tfrac{\\pi}{16}\\).`,
+      ans: `\\dfrac{\\pi}{16}`
+    },
+    {
+      q: `\\int \\cos^4 x\\,dx`,
+      diff: 'hard',
+      steps: `Use \\(\\cos^2 x = \\tfrac{1+\\cos 2x}{2}\\) twice: \\(\\cos^4 x = \\tfrac{3+4\\cos 2x+\\cos 4x}{8}\\).
+Integrate term by term.`,
+      ans: `\\dfrac{3x}{8}+\\dfrac{\\sin 2x}{4}+\\dfrac{\\sin 4x}{32}+C`
+    },
+  ],
+
+  trigsub: [
+    {
+      q: `\\int \\frac{dx}{\\sqrt{1-x^2}}`,
+      diff: 'easy',
+      steps: `Let \\(x=\\sin\\theta\\), \\(dx=\\cos\\theta\\,d\\theta\\), \\(\\sqrt{1-x^2}=\\cos\\theta\\).
+Integral: \\(\\int\\frac{\\cos\\theta\\,d\\theta}{\\cos\\theta}=\\int d\\theta=\\theta=\\arcsin x\\).`,
+      ans: `\\arcsin x+C`
+    },
+    {
+      q: `\\int \\sqrt{4-x^2}\\,dx`,
+      diff: 'med',
+      steps: `Let \\(x=2\\sin\\theta\\), \\(dx=2\\cos\\theta\\,d\\theta\\), \\(\\sqrt{4-x^2}=2\\cos\\theta\\).
+\\(\\int 4\\cos^2\\theta\\,d\\theta = 2\\int(1+\\cos 2\\theta)\\,d\\theta = 2\\theta+\\sin 2\\theta\\).
+Back-sub: \\(\\theta=\\arcsin\\tfrac{x}{2}\\), \\(\\sin 2\\theta=2\\sin\\theta\\cos\\theta=\\tfrac{x\\sqrt{4-x^2}}{2}\\).`,
+      ans: `\\dfrac{x\\sqrt{4-x^2}}{2}+2\\arcsin\\dfrac{x}{2}+C`
+    },
+    {
+      q: `\\int \\frac{dx}{x^2\\sqrt{x^2+9}}`,
+      diff: 'hard',
+      steps: `Let \\(x=3\\tan\\theta\\), \\(dx=3\\sec^2\\theta\\,d\\theta\\), \\(\\sqrt{x^2+9}=3\\sec\\theta\\).
+Numerator: \\(3\\sec^2\\theta\\,d\\theta\\). Denominator: \\(9\\tan^2\\theta\\cdot 3\\sec\\theta\\).
+Integral: \\(\\tfrac{1}{9}\\int\\tfrac{\\cos\\theta}{\\sin^2\\theta}\\,d\\theta = \\tfrac{1}{9}\\int\\csc\\theta\\cot\\theta\\,d\\theta=-\\tfrac{\\csc\\theta}{9}\\).
+Back-sub: \\(\\csc\\theta=\\tfrac{\\sqrt{x^2+9}}{x}\\).`,
+      ans: `-\\dfrac{\\sqrt{x^2+9}}{9x}+C`
+    },
+    {
+      q: `\\int \\frac{dx}{(1+x^2)^2}`,
+      diff: 'hard',
+      steps: `Let \\(x=\\tan\\theta\\), \\(dx=\\sec^2\\theta\\,d\\theta\\), \\((1+x^2)^2=\\sec^4\\theta\\).
+\\(\\int\\tfrac{\\sec^2\\theta}{{\\sec^4\\theta}}\\,d\\theta=\\int\\cos^2\\theta\\,d\\theta=\\tfrac{\\theta}{2}+\\tfrac{\\sin 2\\theta}{4}\\).
+Back-sub: \\(\\theta=\\arctan x\\), \\(\\sin 2\\theta=\\tfrac{2x}{1+x^2}\\).`,
+      ans: `\\dfrac{\\arctan x}{2}+\\dfrac{x}{2(1+x^2)}+C`
+    },
+    {
+      q: `\\int_0^3 \\frac{dx}{\\sqrt{x^2+9}}`,
+      diff: 'med',
+      steps: `Let \\(x=3\\tan\\theta\\): \\(\\int\\tfrac{3\\sec^2\\theta\\,d\\theta}{3\\sec\\theta}=\\int\\sec\\theta\\,d\\theta=\\ln|\\sec\\theta+\\tan\\theta|\\).
+Limits: \\(x=0\\Rightarrow\\theta=0\\); \\(x=3\\Rightarrow\\theta=\\pi/4\\).
+Evaluate: \\(\\ln(\\sqrt{2}+1)-\\ln 1\\).`,
+      ans: `\\ln(\\sqrt{2}+1)`
+    },
+    {
+      q: `\\int \\frac{x^2}{\\sqrt{x^2-25}}\\,dx`,
+      diff: 'hard',
+      steps: `Let \\(x=5\\sec\\theta\\), \\(\\sqrt{x^2-25}=5\\tan\\theta\\).
+\\(\\int\\tfrac{25\\sec^2\\theta\\cdot 5\\sec\\theta\\,d\\theta}{5\\tan\\theta}=25\\int\\sec\\theta\\tan^2\\theta\\,d\\theta=25\\int\\sec^3\\theta-\\sec\\theta\\,d\\theta\\).
+Use \\(\\int\\sec^3\\theta\\,d\\theta\\) reduction formula.`,
+      ans: `\\dfrac{x\\sqrt{x^2-25}}{2}-\\dfrac{25}{2}\\ln\\left|\\dfrac{x+\\sqrt{x^2-25}}{5}\\right|+C`
+    },
+  ],
+
+  partial: [
+    {
+      q: `\\int \\frac{1}{x^2-1}\\,dx`,
+      diff: 'easy',
+      steps: `Factor: \\((x-1)(x+1)\\). Decompose: \\(\\tfrac{A}{x-1}+\\tfrac{B}{x+1}\\).
+\\(A=\\tfrac{1}{2}\\), \\(B=-\\tfrac{1}{2}\\). Integrate each logarithmically.`,
+      ans: `\\dfrac{1}{2}\\ln\\left|\\dfrac{x-1}{x+1}\\right|+C`
+    },
+    {
+      q: `\\int \\frac{2x+1}{x^2-x-6}\\,dx`,
+      diff: 'med',
+      steps: `Factor: \\((x-3)(x+2)\\). Decompose: \\(\\tfrac{A}{x-3}+\\tfrac{B}{x+2}\\).
+Solving: \\(2x+1=A(x+2)+B(x-3)\\). At \\(x=3\\): \\(A=\\tfrac{7}{5}\\). At \\(x=-2\\): \\(B=\\tfrac{3}{5}\\).`,
+      ans: `\\dfrac{7}{5}\\ln|x-3|+\\dfrac{3}{5}\\ln|x+2|+C`
+    },
+    {
+      q: `\\int \\frac{x}{(x+1)(x^2+1)}\\,dx`,
+      diff: 'hard',
+      steps: `Decompose: \\(\\tfrac{A}{x+1}+\\tfrac{Bx+C}{x^2+1}\\).
+\\(x = A(x^2+1)+(Bx+C)(x+1)\\). Match coefficients: \\(A=-\\tfrac{1}{2}\\), \\(B=\\tfrac{1}{2}\\), \\(C=\\tfrac{1}{2}\\).
+Integrate: \\(-\\tfrac{1}{2}\\ln|x+1|+\\tfrac{1}{4}\\ln(x^2+1)+\\tfrac{1}{2}\\arctan x\\).`,
+      ans: `-\\dfrac{1}{2}\\ln|x+1|+\\dfrac{1}{4}\\ln(x^2+1)+\\dfrac{1}{2}\\arctan x+C`
+    },
+    {
+      q: `\\int \\frac{3x^2+x+4}{x^3+4x}\\,dx`,
+      diff: 'hard',
+      steps: `Factor: \\(x(x^2+4)\\). Decompose: \\(\\tfrac{A}{x}+\\tfrac{Bx+C}{x^2+4}\\).
+At \\(x=0\\): \\(A=1\\). Match \\(x^2\\) coeff: \\(A+B=3\\Rightarrow B=2\\). Match constant: \\(4A=4\\checkmark\\). Match \\(x\\): \\(C=1\\).
+\\(\\int\\tfrac{1}{x}dx+\\int\\tfrac{2x}{x^2+4}dx+\\int\\tfrac{1}{x^2+4}dx\\).`,
+      ans: `\\ln|x|+\\ln(x^2+4)+\\dfrac{1}{2}\\arctan\\dfrac{x}{2}+C`
+    },
+    {
+      q: `\\int_2^3 \\frac{1}{x^2-1}\\,dx`,
+      diff: 'med',
+      steps: `From problem 1: antiderivative is \\(\\tfrac{1}{2}\\ln\\left|\\tfrac{x-1}{x+1}\\right|\\).
+Evaluate: \\(\\tfrac{1}{2}[\\ln\\tfrac{2}{4}-\\ln\\tfrac{1}{3}] = \\tfrac{1}{2}\\ln\\tfrac{3}{2}\\).`,
+      ans: `\\dfrac{1}{2}\\ln\\dfrac{3}{2}`
+    },
+    {
+      q: `\\int \\frac{x^2}{x^2+x-2}\\,dx`,
+      diff: 'hard',
+      steps: `Degree of numerator = degree of denominator, so do polynomial long division first: \\(\\tfrac{x^2}{x^2+x-2}=1-\\tfrac{x-2}{x^2+x-2}\\).
+Factor denominator \\((x+2)(x-1)\\) and decompose \\(-\\tfrac{x-2}{(x+2)(x-1)}\\): \\(\\tfrac{A}{x+2}+\\tfrac{B}{x-1}\\).
+\\(A=\\tfrac{4}{3}\\), \\(B=-\\tfrac{1}{3}\\).`,
+      ans: `x+\\dfrac{4}{3}\\ln|x+2|-\\dfrac{1}{3}\\ln|x-1|+C`
+    },
+  ],
+
+  improper: [
+    {
+      q: `\\int_1^\\infty \\frac{1}{x^2}\\,dx`,
+      diff: 'easy',
+      steps: `\\(\\lim_{t\\to\\infty}\\left[-\\tfrac{1}{x}\\right]_1^t = \\lim_{t\\to\\infty}\\left(-\\tfrac{1}{t}+1\\right) = 1\\). Converges.`,
+      ans: `1`
+    },
+    {
+      q: `\\int_1^\\infty \\frac{1}{x}\\,dx`,
+      diff: 'easy',
+      steps: `\\(\\lim_{t\\to\\infty}[\\ln x]_1^t = \\lim_{t\\to\\infty}\\ln t = \\infty\\). The integral diverges.`,
+      ans: `\\text{Diverges}`
+    },
+    {
+      q: `\\int_0^\\infty e^{-2x}\\,dx`,
+      diff: 'easy',
+      steps: `\\(\\lim_{t\\to\\infty}\\left[-\\tfrac{e^{-2x}}{2}\\right]_0^t = \\lim_{t\\to\\infty}\\left(-\\tfrac{e^{-2t}}{2}+\\tfrac{1}{2}\\right) = \\tfrac{1}{2}\\). Converges.`,
+      ans: `\\dfrac{1}{2}`
+    },
+    {
+      q: `\\int_0^1 \\frac{1}{\\sqrt{x}}\\,dx`,
+      diff: 'med',
+      steps: `Discontinuity at \\(x=0\\). \\(\\lim_{a\\to 0^+}\\left[2\\sqrt{x}\\right]_a^1 = \\lim_{a\\to 0^+}(2-2\\sqrt{a}) = 2\\). Converges.`,
+      ans: `2`
+    },
+    {
+      q: `\\int_{-\\infty}^{\\infty} \\frac{1}{1+x^2}\\,dx`,
+      diff: 'med',
+      steps: `Split at 0. Each half: \\(\\lim_{t\\to\\infty}[\\arctan x]_0^t = \\tfrac{\\pi}{2}\\).
+Total: \\(\\tfrac{\\pi}{2}+\\tfrac{\\pi}{2}=\\pi\\). Converges.`,
+      ans: `\\pi`
+    },
+    {
+      q: `\\int_0^\\infty x\\,e^{-x}\\,dx`,
+      diff: 'med',
+      steps: `IBP: \\(u=x\\), \\(dv=e^{-x}\\,dx\\): \\(\\left[-xe^{-x}\\right]_0^\\infty+\\int_0^\\infty e^{-x}\\,dx\\).
+First term \\(\\to 0\\) by L'Hôpital. Second: \\(\\left[-e^{-x}\\right]_0^\\infty=1\\). Converges.`,
+      ans: `1`
+    },
+    {
+      q: `\\int_1^\\infty \\frac{\\ln x}{x^2}\\,dx`,
+      diff: 'hard',
+      steps: `IBP: \\(u=\\ln x\\), \\(dv=x^{-2}\\,dx\\): \\(\\left[-\\tfrac{\\ln x}{x}\\right]_1^\\infty+\\int_1^\\infty x^{-2}\\,dx\\).
+First term \\(\\to 0\\) (L'Hôpital) minus \\(0\\). Second: \\(\\left[-x^{-1}\\right]_1^\\infty=1\\).`,
+      ans: `1`
+    },
+    {
+      q: `\\int_2^\\infty \\frac{1}{x(\\ln x)^2}\\,dx`,
+      diff: 'hard',
+      steps: `Let \\(u=\\ln x\\), \\(du=\\tfrac{dx}{x}\\). Limits: \\(\\ln 2\\) to \\(\\infty\\).
+\\(\\int_{\\ln 2}^\\infty u^{-2}\\,du = \\left[-u^{-1}\\right]_{\\ln 2}^\\infty = \\tfrac{1}{\\ln 2}\\). Converges.`,
+      ans: `\\dfrac{1}{\\ln 2}`
+    },
+  ],
+};
+
+// ═══════════════════════════════════════════════════════════
+// SCORE STATE
+// ═══════════════════════════════════════════════════════════
+const scores = { basic: {}, usub: {}, parts: {}, trig: {}, trigsub: {}, partial: {}, improper: {} };
+
+function updateScoreDisplay(section) {
+  const sc = scores[section];
+  const keys = Object.keys(sc);
+  const total = keys.length;
+  const correct = keys.filter(k => sc[k] === 'got').length;
+  const el = document.getElementById('sv-' + section);
+  if (el) el.textContent = `${correct} / ${total}`;
+}
+
+function resetScore(section) {
+  scores[section] = {};
+  // unmark buttons
+  document.querySelectorAll(`#pg-${section} .sc-btn`).forEach(b => b.classList.remove('selected'));
+  updateScoreDisplay(section);
+}
+
+// ═══════════════════════════════════════════════════════════
+// KATEX HELPERS
+// ═══════════════════════════════════════════════════════════
+function tex(latex, display = false) {
+  try {
+    return katex.renderToString(latex, { displayMode: display, throwOnError: false, trust: true });
+  } catch(e) {
+    return `<span style="color:red">${latex}</span>`;
+  }
+}
+
+// Render a mixed text+math string.
+// Inline math: \(...\)  Display math: \[...\]
+function renderMixed(str) {
+  // Split on \(...\) and \[...\]
+  const parts = str.split(/(\\\[[\s\S]*?\\\]|\\\([\s\S]*?\\\))/g);
+  return parts.map(part => {
+    if (part.startsWith('\\[') && part.endsWith('\\]')) {
+      return '<div class="step-row">' + tex(part.slice(2, -2).trim(), true) + '</div>';
+    } else if (part.startsWith('\\(') && part.endsWith('\\)')) {
+      return tex(part.slice(2, -2).trim(), false);
+    } else {
+      // Plain text — escape HTML and preserve newlines as step rows
+      return part.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                 .split('\n').filter(l => l.trim()).map(l => `<span class="step-row">${l}</span>`).join('');
+    }
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// BUILD PROBLEM CARDS
+// ═══════════════════════════════════════════════════════════
+function buildCards(section) {
+  const container = document.getElementById('pg-' + section);
+  if (!container) return;
+  const probs = PROBLEMS[section];
+  probs.forEach((p, i) => {
+    const id = `${section}-${i}`;
+    const diffLabel = p.diff === 'easy' ? 'Easy' : p.diff === 'med' ? 'Medium' : 'Hard';
+    const diffClass = p.diff === 'easy' ? 'diff-easy' : p.diff === 'med' ? 'diff-med' : 'diff-hard';
+
+    const qRendered    = tex(p.q, true);
+    const stepsRendered = renderMixed(p.steps);
+    const ansRendered  = tex(p.ans, true);
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-question" onclick="toggleSolution('${id}')">
+        <span class="prob-num">${String(i+1).padStart(2,'0')}</span>
+        <div class="prob-math">${qRendered}</div>
+        <span class="prob-diff ${diffClass}">${diffLabel}</span>
+      </div>
+      <div style="padding:0 1.4rem .9rem;">
+        <button class="reveal-btn" onclick="toggleSolution('${id}')">Show solution</button>
+      </div>
+      <div class="solution" id="sol-${id}">
+        <div class="sol-label">Solution steps</div>
+        <div class="sol-steps">${stepsRendered}</div>
+        <div style="margin-top:.75rem;">
+          <div class="sol-label" style="margin-bottom:.4rem;">Answer</div>
+          <span class="sol-final">${ansRendered}</span>
+        </div>
+        <div style="display:flex;gap:.5rem;margin-top:.9rem;">
+          <button class="sc-btn sc-got" id="got-${id}" onclick="markScore('${section}','${id}','got')">✓ Got it</button>
+          <button class="sc-btn sc-not" id="not-${id}" onclick="markScore('${section}','${id}','not')">✗ Missed it</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function toggleSolution(id) {
+  const sol = document.getElementById('sol-' + id);
+  sol.classList.toggle('open');
+}
+
+function markScore(section, id, result) {
+  scores[section][id] = result;
+  document.getElementById('got-' + id).classList.toggle('selected', result === 'got');
+  document.getElementById('not-' + id).classList.toggle('selected', result === 'not');
+  updateScoreDisplay(section);
+}
+
+// ═══════════════════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════════════════
+const tabs = document.querySelectorAll('[data-tab]');
+tabs.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const tab = link.dataset.tab;
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    tabs.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+  });
+});
+
+// ═══════════════════════════════════════════════════════════
+// INIT — render formula strips, ref cards, then all problem cards
+// ═══════════════════════════════════════════════════════════
+// Auto-render static math already in the HTML (formula strips, ref cards)
+document.addEventListener('DOMContentLoaded', () => {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '\\(', right: '\\)', display: false },
+      { left: '\\[', right: '\\]', display: true },
+      { left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false },
+    ],
+    throwOnError: false
+  });
+  // Build all problem cards (math already pre-rendered via katex.renderToString)
+  Object.keys(PROBLEMS).forEach(buildCards);
+});
+</script>
+</body>
+</html>
